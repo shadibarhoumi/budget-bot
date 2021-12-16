@@ -3,6 +3,7 @@ import http from "http";
 import express from "express";
 import twilio from "twilio";
 import bodyParser from "body-parser";
+import { createExpense } from "./database.js";
 
 // const http = require("http");
 // const express = require("express");
@@ -18,16 +19,18 @@ app.post("/sms", (req, res) => {
   // get the message user sent
   const message = req.body.Body;
 
-  const entry = parseMessage(message);
+  const expense = parseMessage(message);
 
   // send back message to the user
   twiml.message(
     "****💰Expense logged in💰**** " +
       "\nPrice: $" +
-      entry.price +
+      expense.price +
       "\nDescription: " +
-      entry.description
+      expense.description
   );
+
+  createExpense(expense);
 
   res.writeHead(200, { "Content-Type": "text/xml" });
   res.end(twiml.toString());
