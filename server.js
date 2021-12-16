@@ -14,12 +14,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post("/sms", (req, res) => {
   const twiml = new twilio.twiml.MessagingResponse();
   // const text = req.textMessage
-  const entry = parseMessage("sjfdh");
-  // const message =
-  // "Price: " + entry.price + "\nDescription: " + entry.description;
+
+  // get the message user sent
   const message = req.body.Body;
-  // console.log(req);
-  twiml.message(message);
+
+  const entry = parseMessage(message);
+
+  // send back message to the user
+  twiml.message(
+    "****💰Expense logged in💰**** " +
+      "\nPrice: $" +
+      entry.price +
+      "\nDescription: " +
+      entry.description
+  );
 
   res.writeHead(200, { "Content-Type": "text/xml" });
   res.end(twiml.toString());

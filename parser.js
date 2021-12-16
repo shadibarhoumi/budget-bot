@@ -1,3 +1,10 @@
+function capitalize(str) {
+  return str[0].toUpperCase() + str.slice(1);
+}
+
 export function parseMessage(msg) {
-  return { price: 10, description: "shjd" };
+  let amount = Number(msg.match(/[0-9\.]+/g));
+  let items = msg.replace(/[0-9\.]+/g, "").trim();
+
+  return { price: amount, description: capitalize(items) };
 }
