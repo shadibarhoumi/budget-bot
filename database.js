@@ -26,3 +26,18 @@ export const createExpense = ({ price, description }) => {
     }
   );
 };
+
+export const getTotalExpense = async () => {
+  const allRecords = await base("Expenses")
+    .select({ fields: ["Amount"] })
+    .all();
+
+  const sum = allRecords.reduce(
+    (currentSum, record) => currentSum + record.fields.Amount,
+    0
+  );
+
+  return sum;
+};
+
+// getTotalExpense();
