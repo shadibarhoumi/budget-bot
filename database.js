@@ -15,14 +15,11 @@ export const createExpense = ({ price, description }) => {
         },
       },
     ],
-    function (err, records) {
+    function (err) {
       if (err) {
         console.error(err);
         return;
       }
-      records.forEach(function (record) {
-        console.log(record.getId());
-      });
     }
   );
 };
@@ -32,12 +29,31 @@ export const getTotalExpense = async () => {
     .select({ fields: ["Amount"] })
     .all();
 
+  const sum = getSum(allRecords);
+  return sum;
+};
+
+export const getTotalDayExpense = async () => {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const allRecords = await base("Expenses")
+    .select({
+      fields: ["Amount", "Date"],
+      filterByFormula: `IS_AFTER({DATE}, '${yesterday}')`,
+    })
+    .all();
+
+  const sum = getSum(allRecords);
+  return sum;
+};
+
+// getTotalDayExpense();
+
+const getSum = (allRecords) => {
   const sum = allRecords.reduce(
     (currentSum, record) => currentSum + record.fields.Amount,
     0
   );
-
-  return sum;
+  return sum.toFixed(2);
 };
-
-// getTotalExpense();
