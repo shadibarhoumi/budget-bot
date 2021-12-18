@@ -4,13 +4,14 @@ const base = new Airtable({ apiKey: "keyP1SbuDuLo1qPhM" }).base(
   "appuSqLyneHIkdtvH"
 );
 
-export const createExpense = ({ price, description }) => {
+export const createExpense = ({ price, description, otherCurrency }) => {
   base("Expenses").create(
     [
       {
         fields: {
-          Items: description,
           Amount: price,
+          MexicanPeso: otherCurrency,
+          Items: description,
           Date: new Date().toISOString().substring(0, 10),
         },
       },
@@ -23,15 +24,6 @@ export const createExpense = ({ price, description }) => {
     }
   );
 };
-
-// export const getTotalExpense = async () => {
-//   const allRecords = await base("Expenses")
-//     .select({ fields: ["Amount"] })
-//     .all();
-
-//   const sum = getSum(allRecords);
-//   return sum;
-// };
 
 const getSum = (allRecords) => {
   const sum = allRecords.reduce(
@@ -56,8 +48,6 @@ export const getTotalDayExpense = async () => {
   return sum;
 };
 
-// getTotalDayExpense();
-
 export const getTotalWeekExpense = async () => {
   const today = new Date();
   const dateAWeekAgo = new Date(
@@ -73,15 +63,11 @@ export const getTotalWeekExpense = async () => {
     })
     .all();
 
-  // console.log(allRecords);
-
   const sumWeek = getSum(allRecords);
 
-  // console.log(sumWeek);
   return sumWeek;
 };
 
-//TODO: get the date range right
 export const getTotalMonthExpense = async () => {
   const today = new Date();
   const dateAMonthAgo = new Date(
@@ -89,7 +75,6 @@ export const getTotalMonthExpense = async () => {
     today.getMonth() - 1,
     today.getDate()
   );
-  // console.log(dateAMonthAgo);
 
   const allRecords = await base("Expenses")
     .select({
@@ -98,14 +83,9 @@ export const getTotalMonthExpense = async () => {
     })
     .all();
 
-  // console.log(allRecords);
-
   const sumMonth = getSum(allRecords);
 
   // console.log(sumMonth);
 
   return sumMonth;
 };
-
-// getTotalWeekExpense();
-// getTotalMonthExpense();

@@ -1,4 +1,4 @@
-import { parseMessage, isValidMessage } from "./parser.js";
+import { parseMessage, isValidMessage, isMexicanPeso } from "./parser.js";
 import http from "http";
 import express from "express";
 import twilio from "twilio";
@@ -57,15 +57,20 @@ http.createServer(app).listen(1337, () => {
 const logInExpense = (twiml, message) => {
   if (isValidMessage(message)) {
     const expense = parseMessage(message);
+
+    createExpense(expense);
     // send back message listing logged-in items to the user
     twiml.message(
-      "****🌈Yay! New expense logged in!🌈**** " +
-        "\nPrice: $" +
-        expense.price +
-        "\nDescription: " +
-        expense.description
+      `🌈Yay! New expense logged in!🌈
+      Price: ${
+        isMexicanPeso(message)
+          ? expense.otherCurrency + " pesos🇲🇽" + " ($" + expense.price + ")"
+          : "$" + expense.price
+      }
+      Description: ${expense.description}`
     );
-    createExpense(expense);
+
+    console.log(expense);
   } else {
     twiml.message("Please enter a valid expense🤪");
   }
