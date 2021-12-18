@@ -5,8 +5,9 @@ import twilio from "twilio";
 import bodyParser from "body-parser";
 import {
   createExpense,
-  getTotalExpense,
+  getTotalWeekExpense,
   getTotalDayExpense,
+  getTotalMonthExpense,
 } from "./database.js";
 
 // const http = require("http");
@@ -23,29 +24,25 @@ app.post("/sms", async (req, res) => {
   // get the message user sent
   const message = req.body.Body.trim().toLowerCase();
 
-  if (
-    message === "total today" ||
-    message === "today total" ||
-    message == "tt"
+  if (message === "total day" || message === "day total" || message === "td") {
+    const sumToday = await getTotalDayExpense();
+    twiml.message("💰Your total spending today: $" + sumToday);
+  } else if (
+    message === "total week" ||
+    message === "week total" ||
+    message === "tw"
   ) {
-    // twiml.message("🧐Calculating🧮 total spending...");
-    const sum = await getTotalDayExpense();
-    twiml.message("💰Your total spending today: $" + sum);
-    // console.log(sum);
-  }
-
-  // if (message === "total" || message == "t") {
-  //   // twiml.message("🧐Calculating🧮 total spending...");
-  //   const sum = await getTotalExpense();
-  //   twiml.message("💰Your total spending: $" + sum);
-  //   // console.log(sum);
-  // }
-
-  if (
-    message != "total" &&
-    message != "total today" &&
-    message != "today total"
+    const sumWeek = await getTotalWeekExpense();
+    twiml.message("💰Your total spending this week: $" + sumWeek);
+  } else if (
+    message === "total month" ||
+    message === "month total" ||
+    message === "mt" ||
+    message === "tm"
   ) {
+    const sumMonth = await getTotalMonthExpense();
+    twiml.message("💰Your total spending this month: $" + sumMonth);
+  } else {
     logInExpense(twiml, message);
   }
 
