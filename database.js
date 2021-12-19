@@ -4,7 +4,7 @@ const base = new Airtable({ apiKey: "keyP1SbuDuLo1qPhM" }).base(
   "appuSqLyneHIkdtvH"
 );
 
-export const createExpense = ({ price, description, otherCurrency }) => {
+export const createExpense = ({ price, description, otherCurrency, tag }) => {
   base("Expenses").create(
     [
       {
@@ -12,6 +12,7 @@ export const createExpense = ({ price, description, otherCurrency }) => {
           Amount: price,
           MexicanPeso: otherCurrency,
           Items: description,
+          Category: tag,
           Date: new Date().toISOString().substring(0, 10),
         },
       },

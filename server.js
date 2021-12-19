@@ -10,9 +10,12 @@ import {
   getTotalMonthExpense,
 } from "./database.js";
 
-// const http = require("http");
-// const express = require("express");
-// const MessagingResponse = require("twilio").twiml.MessagingResponse;
+// const matchingEmoji = {
+//   Lodging: "🏡",
+//   Transportation: "🎢",
+//   Other: "🎠",
+//   Shopping: "🧺",
+// };
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -64,13 +67,19 @@ const logInExpense = (twiml, message) => {
       `🌈Yay! New expense logged in!🌈
       Price: ${
         isMexicanPeso(message)
-          ? expense.otherCurrency + " pesos🇲🇽" + " ($" + expense.price + ")"
+          ? expense.otherCurrency.toFixed(2) +
+            " pesos🇲🇽" +
+            " ($" +
+            expense.price.toFixed(2) +
+            ")"
           : "$" + expense.price
       }
-      Description: ${expense.description}`
+      Description: ${expense.description}
+      Category: ${expense.tag}
+      `
     );
 
-    console.log(expense);
+    // console.log(expense);
   } else {
     twiml.message("Please enter a valid expense🤪");
   }
