@@ -56,8 +56,9 @@ app.post("/sms", async (req, res) => {
   res.end(twiml.toString());
 });
 
-http.createServer(app).listen(1337, () => {
-  console.log("Express server listening on port 1337");
+const port = process.env.PORT || 3000;
+http.createServer(app).listen(port, () => {
+  console.log(`Express server listening on port ${port}`);
 });
 
 const logInExpense = (twiml, message) => {
