@@ -17,6 +17,9 @@ import {
 //   Shopping: "🧺",
 // };
 
+// TODO: express api, node.js -- common stack to create an api in js
+// together they form a stack
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
