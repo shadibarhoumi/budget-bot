@@ -91,7 +91,7 @@ function getNewCategory(txt) {
 }
 
 let categoryMap = { airbnb: "Lodging", flight: "Transportation" };
-console.log("creating category map", categoryMap);
+// console.log("creating category map", categoryMap);
 const getCategoryFromMap = (txt) => {
   const wordList = txt.split(" ");
   for (const word of wordList) {
@@ -107,4 +107,10 @@ const getCategoryFromMap = (txt) => {
     console.log(categoryMap);
   }
   return newCategory;
+};
+
+export const getRow = (msg) => {
+  const row = Number(msg.match(/[0-9]+/g));
+  console.log(row);
+  return row;
 };

@@ -1,4 +1,9 @@
-import { parseMessage, isValidMessage, isMexicanPeso } from "./parser.js";
+import {
+  parseMessage,
+  isValidMessage,
+  isMexicanPeso,
+  getRow as getShortIdFromMessage,
+} from "./parser.js";
 import http from "http";
 import express from "express";
 import twilio from "twilio";
@@ -8,6 +13,8 @@ import {
   getTotalWeekExpense,
   getTotalDayExpense,
   getTotalMonthExpense,
+  getRecordWithShortId,
+  deleteRecordWithId,
 } from "./database.js";
 
 // const matchingEmoji = {
@@ -30,7 +37,21 @@ app.post("/sms", async (req, res) => {
   // get the message user sent
   const message = req.body.Body.trim().toLowerCase();
 
-  if (message === "total day" || message === "day total" || message === "td") {
+  const messagePureTxt = message.replace(/[0-9\.]+/g, "").trim();
+  console.log(messagePureTxt);
+
+  if (messagePureTxt === "delete") {
+    const shortId = getShortIdFromMessage(message);
+    const record = await getRecordWithShortId(shortId);
+    deleteRecordWithId(record.id);
+    twiml.message(
+      `Deleted expense: "${record.fields.Items}" with id ${record.fields.ShortId}`
+    );
+  } else if (
+    message === "total day" ||
+    message === "day total" ||
+    message === "td"
+  ) {
     const sumToday = await getTotalDayExpense();
     twiml.message("💰Your total spending today: $" + sumToday);
   } else if (
@@ -56,7 +77,8 @@ app.post("/sms", async (req, res) => {
   res.end(twiml.toString());
 });
 
-const port = process.env.PORT || 3000;
+const port = 1337;
+// const port = process.env.PORT || 3000;
 http.createServer(app).listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });

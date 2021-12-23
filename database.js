@@ -17,13 +17,33 @@ export const createExpense = ({ price, description, otherCurrency, tag }) => {
         },
       },
     ],
-    function (err) {
+    function (err, record) {
       if (err) {
         console.error(err);
         return;
       }
+      console.log(record);
     }
   );
+};
+
+export const deleteRecordWithId = async (id) => {
+  base("Expenses").destroy(id, function (err) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+  });
+};
+
+export const getRecordWithShortId = async (shortId) => {
+  const matchingRecords = await base("Expenses")
+    .select({
+      filterByFormula: `{ShortId} = ${shortId}`,
+    })
+    .all();
+
+  return matchingRecords[0];
 };
 
 const getSum = (allRecords) => {
@@ -41,7 +61,7 @@ export const getTotalDayExpense = async () => {
   const allRecords = await base("Expenses")
     .select({
       fields: ["Amount", "Date"],
-      filterByFormula: `IS_AFTER({DATE}, '${yesterday}')`,
+      filterByFormula: `IS_AFTER({DATE}, '${yesterday}'`,
     })
     .all();
 
@@ -90,3 +110,5 @@ export const getTotalMonthExpense = async () => {
 
   return sumMonth;
 };
+
+//
