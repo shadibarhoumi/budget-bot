@@ -38,7 +38,6 @@ app.post("/sms", async (req, res) => {
   const message = req.body.Body.trim().toLowerCase();
 
   const messagePureTxt = message.replace(/[0-9\.]+/g, "").trim();
-  // console.log(messagePureTxt);
 
   if (messagePureTxt === "delete") {
     const shortId = getShortIdFromMessage(message);
@@ -77,8 +76,8 @@ app.post("/sms", async (req, res) => {
   res.end(twiml.toString());
 });
 
-const port = 1337;
-// const port = process.env.PORT || 3000;
+// const port = 1337;
+const port = process.env.PORT || 3000;
 http.createServer(app).listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
