@@ -1,7 +1,7 @@
 import Airtable from "airtable";
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
-  "appuSqLyneHIkdtvH"
+  AIRTABLE_BASE
 );
 
 export const createExpense = ({ price, description, otherCurrency, tag }) => {
