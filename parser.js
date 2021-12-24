@@ -104,13 +104,13 @@ const getCategoryFromMap = (txt) => {
   if (newItem) {
     categoryMap[newItem] = newCategory;
     console.log(newItem);
-    console.log(categoryMap);
+    // console.log(categoryMap);
   }
   return newCategory;
 };
 
 export const getRow = (msg) => {
   const row = Number(msg.match(/[0-9]+/g));
-  console.log(row);
+  // console.log(row);
   return row;
 };

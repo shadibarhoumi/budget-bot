@@ -5,26 +5,30 @@ const base = new Airtable({ apiKey: "keyP1SbuDuLo1qPhM" }).base(
 );
 
 export const createExpense = ({ price, description, otherCurrency, tag }) => {
-  base("Expenses").create(
-    [
-      {
-        fields: {
-          Amount: price,
-          MexicanPeso: otherCurrency,
-          Items: description,
-          Category: tag,
-          Date: new Date().toISOString().substring(0, 10),
+  const promise = new Promise((resolve, reject) => {
+    base("Expenses").create(
+      [
+        {
+          fields: {
+            Amount: price,
+            MexicanPeso: otherCurrency,
+            Items: description,
+            Category: tag,
+            Date: new Date().toISOString().substring(0, 10),
+          },
         },
-      },
-    ],
-    function (err, record) {
-      if (err) {
-        console.error(err);
-        return;
+      ],
+      function (err, record) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        resolve(record[0].fields.ShortId);
       }
-      console.log(record);
-    }
-  );
+    );
+  });
+
+  return promise;
 };
 
 export const deleteRecordWithId = async (id) => {

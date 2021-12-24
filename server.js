@@ -38,7 +38,7 @@ app.post("/sms", async (req, res) => {
   const message = req.body.Body.trim().toLowerCase();
 
   const messagePureTxt = message.replace(/[0-9\.]+/g, "").trim();
-  console.log(messagePureTxt);
+  // console.log(messagePureTxt);
 
   if (messagePureTxt === "delete") {
     const shortId = getShortIdFromMessage(message);
@@ -70,7 +70,7 @@ app.post("/sms", async (req, res) => {
     const sumMonth = await getTotalMonthExpense();
     twiml.message("💰Your total spending this month: $" + sumMonth);
   } else {
-    logInExpense(twiml, message);
+    await logInExpense(twiml, message);
   }
 
   res.writeHead(200, { "Content-Type": "text/xml" });
@@ -83,12 +83,12 @@ http.createServer(app).listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
 
-const logInExpense = (twiml, message) => {
+const logInExpense = async (twiml, message) => {
   if (isValidMessage(message)) {
     const expense = parseMessage(message);
 
-    createExpense(expense);
-    // send back message listing logged-in items to the user
+    const shortId = await createExpense(expense);
+
     twiml.message(
       `🌈Yay! New expense logged in!🌈
       Price: ${
@@ -102,10 +102,9 @@ const logInExpense = (twiml, message) => {
       }
       Description: ${expense.description}
       Category: ${expense.tag}
+      Entry ID: ${shortId}
       `
     );
-
-    // console.log(expense);
   } else {
     twiml.message("Please enter a valid expense🤪");
   }
