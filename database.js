@@ -1,6 +1,6 @@
 import Airtable from "airtable";
 
-const base = new Airtable({ apiKey: "keyP1SbuDuLo1qPhM" }).base(
+const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
   "appuSqLyneHIkdtvH"
 );
 
