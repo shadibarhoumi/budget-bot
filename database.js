@@ -59,13 +59,13 @@ const getSum = (allRecords) => {
 };
 
 export const getTotalDayExpense = async () => {
-  const midnightToday = new Date();
-  midnightToday.setHours(0, 0, 0);
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
 
   const allRecords = await base("Expenses")
     .select({
       fields: ["Amount", "Date"],
-      filterByFormula: `IS_AFTER({DATE}, '${midnightToday}')`,
+      filterByFormula: `IS_AFTER({DATE}, '${yesterday}')`,
     })
     .all();
 
