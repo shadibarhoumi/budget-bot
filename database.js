@@ -65,7 +65,7 @@ export const getTotalDayExpense = async () => {
   const allRecords = await base("Expenses")
     .select({
       fields: ["Amount", "Date"],
-      filterByFormula: `IS_AFTER({DATE}, '${yesterday}'`,
+      filterByFormula: `IS_AFTER({DATE}, '${yesterday})'`,
     })
     .all();
 
