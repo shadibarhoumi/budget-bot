@@ -1,12 +1,9 @@
 import Airtable from "airtable";
-
-const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
-  process.env.AIRTABLE_BASE
-);
+import { AirtableBase } from "./airtable.js";
 
 export const createExpense = ({ price, description, otherCurrency, tag }) => {
   const promise = new Promise((resolve, reject) => {
-    base("Expenses").create(
+    AirtableBase("Expenses").create(
       [
         {
           fields: {
@@ -32,7 +29,7 @@ export const createExpense = ({ price, description, otherCurrency, tag }) => {
 };
 
 export const deleteRecordWithId = async (id) => {
-  base("Expenses").destroy(id, function (err) {
+  AirtableBase("Expenses").destroy(id, function (err) {
     if (err) {
       console.error(err);
       return;
@@ -41,7 +38,7 @@ export const deleteRecordWithId = async (id) => {
 };
 
 export const getRecordWithShortId = async (shortId) => {
-  const matchingRecords = await base("Expenses")
+  const matchingRecords = await AirtableBase("Expenses")
     .select({
       filterByFormula: `{ShortId} = ${shortId}`,
     })
@@ -61,8 +58,9 @@ const getSum = (allRecords) => {
 export const getTotalDayExpense = async () => {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
 
-  const allRecords = await base("Expenses")
+  const allRecords = await AirtableBase("Expenses")
     .select({
       fields: ["Amount", "Date"],
       filterByFormula: `IS_AFTER({DATE}, '${yesterday}')`,
@@ -81,7 +79,7 @@ export const getTotalWeekExpense = async () => {
     today.getDate() - 7
   );
 
-  const allRecords = await base("Expenses")
+  const allRecords = await AirtableBase("Expenses")
     .select({
       fields: ["Amount", "Date"],
       filterByFormula: `IF(AND(IS_AFTER({DATE}, '${dateAWeekAgo}'), IS_BEFORE({DATE}, '${today}')), 1, 0)`,
@@ -101,7 +99,7 @@ export const getTotalMonthExpense = async () => {
     today.getDate()
   );
 
-  const allRecords = await base("Expenses")
+  const allRecords = await AirtableBase("Expenses")
     .select({
       fields: ["Amount", "Date"],
       filterByFormula: `IF(AND(IS_AFTER({DATE}, '${dateAMonthAgo}'), IS_BEFORE({DATE}, '${today}')), 1, 0)`,
@@ -110,9 +108,5 @@ export const getTotalMonthExpense = async () => {
 
   const sumMonth = getSum(allRecords);
 
-  // console.log(sumMonth);
-
   return sumMonth;
 };
-
-//
