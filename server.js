@@ -10,9 +10,6 @@ import twilio from "twilio";
 import bodyParser from "body-parser";
 import {
   createExpense,
-  getTotalWeekExpense,
-  getTotalDayExpense,
-  getTotalMonthExpense,
   getRecordWithShortId,
   deleteRecordWithId,
 } from "./database.js";
