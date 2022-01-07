@@ -4,6 +4,7 @@ const yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
 yesterday.setHours(0, 0, 0, 0);
 
+const today = new Date();
 const dateAWeekAgo = new Date(
   today.getFullYear(),
   today.getMonth(),
@@ -54,7 +55,7 @@ const getRecordsForDuration = async (duration) => {
 };
 
 export const getExpenseForDuration = async (duration) => {
-  const allRecords = await getExpenseForDuration(duration);
+  const allRecords = await getRecordsForDuration(duration);
   const sum = getSum(allRecords);
   return sum;
 };
