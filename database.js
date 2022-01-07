@@ -1,4 +1,3 @@
-import Airtable from "airtable";
 import { AirtableBase } from "./airtable.js";
 
 export const createExpense = ({ price, description, otherCurrency, tag }) => {
@@ -47,6 +46,7 @@ export const getRecordWithShortId = async (shortId) => {
   return matchingRecords[0];
 };
 
+// delete below if new code works
 const getSum = (allRecords) => {
   const sum = allRecords.reduce(
     (currentSum, record) => currentSum + record.fields.Amount,

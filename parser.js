@@ -2,6 +2,18 @@ function capitalize(str) {
   return str[0].toUpperCase() + str.slice(1);
 }
 
+function containsRedundantWord(txt) {
+  return (
+    txt.includes("food") ||
+    txt.includes("transportation") ||
+    txt.includes("lodging") ||
+    txt.includes("other") ||
+    txt.includes("shopping") ||
+    txt.includes("peso") ||
+    txt.includes("pesos")
+  );
+}
+
 export function parseMessage(msg) {
   let amount = isMexicanPeso(msg)
     ? Number(msg.match(/[0-9\.]+/g)) / 20.78
@@ -11,7 +23,8 @@ export function parseMessage(msg) {
     .replace(/[0-9\.]+/g, "")
     .trim()
     .toLowerCase();
-  let items = containsRedundantWord(txt) ? removeRedundantWord(txt) : txt;
+
+  let items = containsRedundantWords(txt) ? removeRedundantWords(txt) : txt;
 
   let peso = isMexicanPeso(msg) ? Number(msg.match(/[0-9\.]+/g)) : null;
 
@@ -23,18 +36,6 @@ export function parseMessage(msg) {
     otherCurrency: peso,
     tag: category,
   };
-}
-
-function containsRedundantWord(txt) {
-  return (
-    txt.includes("food") ||
-    txt.includes("transportation") ||
-    txt.includes("lodging") ||
-    txt.includes("other") ||
-    txt.includes("shopping") ||
-    txt.includes("peso") ||
-    txt.includes("pesos")
-  );
 }
 
 export function isValidMessage(msg) {
@@ -49,29 +50,62 @@ export function isMexicanPeso(msg) {
   );
 }
 
-function removeRedundantWord(txt) {
-  if (txt.includes("pesos")) {
-    return txt.replace("pesos", "").trim();
+const redundantInputWords = [
+  "pesos",
+  "peso",
+  "lodging",
+  "transportation",
+  "other",
+  "shopping",
+  "foods",
+];
+
+function getRedundantWords(txt) {
+  let redundantWords = [];
+  const txtList = txt.split(" ");
+
+  for (const word of txtList) {
+    if (redundantInputWords.includes(word)) {
+      redundantWords.push(word);
+    }
   }
-  if (txt.includes("pesos")) {
-    return txt.replace("peso", "").trim();
-  }
-  if (txt.includes("lodging")) {
-    return txt.replace("lodging", "").trim();
-  }
-  if (txt.includes("transportation")) {
-    return txt.replace("transportation", "").trim();
-  }
-  if (txt.includes("other")) {
-    return txt.replace("other", "").trim();
-  }
-  if (txt.includes("shopping")) {
-    return txt.replace("shopping", "").trim();
-  }
-  if (txt.includes("food")) {
-    return txt.replace("food", "").trim();
-  }
+  return redundantWords;
 }
+
+function containsRedundantWords(txt) {
+  return getRedundantWords(txt).length != 0;
+}
+
+function removeRedundantWords(txt) {
+  const words = getRedundantWords(txt);
+  for (const word of words) {
+    txt = txt.replace(word, "").trim();
+  }
+  return txt;
+}
+
+// if (txt.includes("pesos")) {
+//   return txt.replace("pesos", "").trim();
+// }
+// if (txt.includes("peso")) {
+//   return txt.replace("peso", "").trim();
+// }
+// if (txt.includes("lodging")) {
+//   return txt.replace("lodging", "").trim();
+// }
+// if (txt.includes("transportation")) {
+//   return txt.replace("transportation", "").trim();
+// }
+// if (txt.includes("other")) {
+//   return txt.replace("other", "").trim();
+// }
+// if (txt.includes("shopping")) {
+//   return txt.replace("shopping", "").trim();
+// }
+// if (txt.includes("food")) {
+//   return txt.replace("food", "").trim();
+// }
+// }
 
 function getNewCategory(txt) {
   if (txt.includes("lodging")) {
@@ -91,7 +125,7 @@ function getNewCategory(txt) {
 }
 
 let categoryMap = { airbnb: "Lodging", flight: "Transportation" };
-// console.log("creating category map", categoryMap);
+
 const getCategoryFromMap = (txt) => {
   const wordList = txt.split(" ");
   for (const word of wordList) {
@@ -100,17 +134,14 @@ const getCategoryFromMap = (txt) => {
     }
   }
   const newCategory = getNewCategory(txt);
-  const newItem = removeRedundantWord(txt);
+  const newItem = removeRedundantWords(txt);
   if (newItem) {
     categoryMap[newItem] = newCategory;
-    console.log(newItem);
-    // console.log(categoryMap);
   }
   return newCategory;
 };
 
 export const getRow = (msg) => {
   const row = Number(msg.match(/[0-9]+/g));
-  // console.log(row);
   return row;
 };

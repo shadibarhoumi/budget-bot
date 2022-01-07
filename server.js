@@ -17,12 +17,7 @@ import {
   deleteRecordWithId,
 } from "./database.js";
 
-// const matchingEmoji = {
-//   Lodging: "🏡",
-//   Transportation: "🎢",
-//   Other: "🎠",
-//   Shopping: "🧺",
-// };
+import { getTotalOfEachCategory, getExpenseForDuration } from "./expense.js";
 
 // TODO: express api, node.js -- common stack to create an api in js
 // together they form a stack
@@ -51,14 +46,16 @@ app.post("/sms", async (req, res) => {
     message === "day total" ||
     message === "td"
   ) {
-    const sumToday = await getTotalDayExpense();
-    twiml.message("💰Your total spending today: $" + sumToday);
+    // const sumToday = await getTotalDayExpense();
+    const sumDay = await getExpenseForDuration("day");
+    twiml.message("💰Your total spending today: $" + sumDay);
   } else if (
     message === "total week" ||
     message === "week total" ||
     message === "tw"
   ) {
-    const sumWeek = await getTotalWeekExpense();
+    // const sumWeek = await getTotalWeekExpense();
+    const sumWeek = await getExpenseForDuration("week");
     twiml.message("💰Your total spending this week: $" + sumWeek);
   } else if (
     message === "total month" ||
@@ -66,7 +63,8 @@ app.post("/sms", async (req, res) => {
     message === "mt" ||
     message === "tm"
   ) {
-    const sumMonth = await getTotalMonthExpense();
+    // const sumMonth = await getTotalMonthExpense();
+    const sumMonth = await getExpenseForDuration("month");
     twiml.message("💰Your total spending this month: $" + sumMonth);
   } else {
     await logInExpense(twiml, message);
