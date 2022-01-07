@@ -84,29 +84,6 @@ function removeRedundantWords(txt) {
   return txt;
 }
 
-// if (txt.includes("pesos")) {
-//   return txt.replace("pesos", "").trim();
-// }
-// if (txt.includes("peso")) {
-//   return txt.replace("peso", "").trim();
-// }
-// if (txt.includes("lodging")) {
-//   return txt.replace("lodging", "").trim();
-// }
-// if (txt.includes("transportation")) {
-//   return txt.replace("transportation", "").trim();
-// }
-// if (txt.includes("other")) {
-//   return txt.replace("other", "").trim();
-// }
-// if (txt.includes("shopping")) {
-//   return txt.replace("shopping", "").trim();
-// }
-// if (txt.includes("food")) {
-//   return txt.replace("food", "").trim();
-// }
-// }
-
 function getNewCategory(txt) {
   if (txt.includes("lodging")) {
     return "Lodging";

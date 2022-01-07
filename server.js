@@ -17,7 +17,11 @@ import {
   deleteRecordWithId,
 } from "./database.js";
 
-import { getTotalOfEachCategory, getExpenseForDuration } from "./expense.js";
+import {
+  getTotalOfEachCategory,
+  getExpenseForDuration,
+  getRecordsForDuration,
+} from "./expense.js";
 
 // TODO: express api, node.js -- common stack to create an api in js
 // together they form a stack
@@ -46,7 +50,6 @@ app.post("/sms", async (req, res) => {
     message === "day total" ||
     message === "td"
   ) {
-    // const sumToday = await getTotalDayExpense();
     const sumDay = await getExpenseForDuration("day");
     twiml.message("💰Your total spending today: $" + sumDay);
   } else if (
@@ -54,7 +57,6 @@ app.post("/sms", async (req, res) => {
     message === "week total" ||
     message === "tw"
   ) {
-    // const sumWeek = await getTotalWeekExpense();
     const sumWeek = await getExpenseForDuration("week");
     twiml.message("💰Your total spending this week: $" + sumWeek);
   } else if (
@@ -63,9 +65,27 @@ app.post("/sms", async (req, res) => {
     message === "mt" ||
     message === "tm"
   ) {
-    // const sumMonth = await getTotalMonthExpense();
     const sumMonth = await getExpenseForDuration("month");
     twiml.message("💰Your total spending this month: $" + sumMonth);
+  } else if (
+    message === "total month category" ||
+    message === "month total category" ||
+    message === "mt category" ||
+    message === "tm category"
+  ) {
+    await displayCategorizedExpense("month");
+  } else if (
+    message === "total week category" ||
+    message === "week total category" ||
+    message === "tw category"
+  ) {
+    await displayCategorizedExpense("week");
+  } else if (
+    message === "total day category" ||
+    message === "day total category" ||
+    message === "td category"
+  ) {
+    await displayCategorizedExpense("day");
   } else {
     await logInExpense(twiml, message);
   }
@@ -79,6 +99,18 @@ const port = process.env.PORT || 3000;
 http.createServer(app).listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
+
+const displayCategorizedExpense = async (duration) => {
+  const records = await getRecordsForDuration(duration);
+  const categorizedExpense = getTotalOfEachCategory(records);
+  twiml.message(`Your total spending of each category this ${duration}:
+    Food🍱: $${categorizedExpense.Food}
+    Transportation🚀: ${categorizedExpense.Transportation}
+    Lodging🏕: $${categorizedExpense.Lodging}
+    Shopping🦄: $${categorizedExpense.Shopping}
+    Other🦔: $${categorizedExpense.Other}
+    `);
+};
 
 const logInExpense = async (twiml, message) => {
   if (isValidMessage(message)) {

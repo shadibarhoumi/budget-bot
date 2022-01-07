@@ -41,7 +41,7 @@ const getSum = (records) => {
   }
 };
 
-const getRecordsForDuration = async (duration) => {
+export const getRecordsForDuration = async (duration) => {
   const formula = filterByDuration(duration);
 
   const allRecordsForDuration = await AirtableBase("Expenses")
