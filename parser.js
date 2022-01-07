@@ -2,18 +2,6 @@ function capitalize(str) {
   return str[0].toUpperCase() + str.slice(1);
 }
 
-function containsRedundantWord(txt) {
-  return (
-    txt.includes("food") ||
-    txt.includes("transportation") ||
-    txt.includes("lodging") ||
-    txt.includes("other") ||
-    txt.includes("shopping") ||
-    txt.includes("peso") ||
-    txt.includes("pesos")
-  );
-}
-
 export function parseMessage(msg) {
   let amount = isMexicanPeso(msg)
     ? Number(msg.match(/[0-9\.]+/g)) / 20.78

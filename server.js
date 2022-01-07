@@ -64,25 +64,11 @@ app.post("/sms", async (req, res) => {
   ) {
     const sumMonth = await getExpenseForDuration("month");
     twiml.message("💰Your total spending this month: $" + sumMonth);
-  } else if (
-    message === "total month category" ||
-    message === "month total category" ||
-    message === "mt category" ||
-    message === "tm category"
-  ) {
-    await displayCategorizedExpense("month");
-  } else if (
-    message === "total week category" ||
-    message === "week total category" ||
-    message === "tw category"
-  ) {
-    await displayCategorizedExpense("week");
-  } else if (
-    message === "total day category" ||
-    message === "day total category" ||
-    message === "td category"
-  ) {
-    await displayCategorizedExpense("day");
+  } else if (message === "category") {
+    twiml.message(
+      `🎋check out your expense in each category in BudgetChart🔮:
+      https://budget-bot-frontend.vercel.app/`
+    );
   } else {
     await logInExpense(twiml, message);
   }
@@ -96,18 +82,6 @@ const port = process.env.PORT || 3000;
 http.createServer(app).listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 });
-
-const displayCategorizedExpense = async (duration) => {
-  const records = await getRecordsForDuration(duration);
-  const categorizedExpense = getTotalOfEachCategory(records);
-  twiml.message(`Your total spending of each category this ${duration}:
-    Food🍱: $${categorizedExpense.Food}
-    Transportation🚀: ${categorizedExpense.Transportation}
-    Lodging🏕: $${categorizedExpense.Lodging}
-    Shopping🦄: $${categorizedExpense.Shopping}
-    Other🦔: $${categorizedExpense.Other}
-    `);
-};
 
 const logInExpense = async (twiml, message) => {
   if (isValidMessage(message)) {
