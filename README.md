@@ -1,5 +1,1 @@
-# budget-bot
-
-# heading
-
-_bold me_
+BudgetBot allows users to quickly log in, check, and delete personal expense record via SMS.
