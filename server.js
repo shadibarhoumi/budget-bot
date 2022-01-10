@@ -64,7 +64,7 @@ app.post("/sms", async (req, res) => {
   ) {
     const sumMonth = await getExpenseForDuration("month");
     twiml.message("💰Your total spending this month: $" + sumMonth);
-  } else if (message === "category") {
+  } else if (message === "categories") {
     twiml.message(
       `🎋check out your expense in each category in BudgetChart🔮:
       https://budget-bot-frontend.vercel.app/`
