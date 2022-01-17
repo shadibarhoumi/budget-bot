@@ -48,6 +48,7 @@ const redundantInputWords = [
   "food",
   "reimbursesb",
   "reimbursewx",
+  "$",
 ];
 
 function getRedundantWords(txt) {
