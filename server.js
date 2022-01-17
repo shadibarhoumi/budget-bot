@@ -47,7 +47,7 @@ app.post("/sms", async (req, res) => {
 
   const messagePureTxt = message.replace(/[0-9\.]+/g, "").trim();
 
-  if (messagePureTxt === "what can i ask" || messagePureTxt === "commands") {
+  if (messagePureTxt === "what can i ask" || messagePureTxt === "help") {
     twiml.message(`Hi there, welcome to BudgetBot🦄! Here are some amazing things it can do for you:
     "delete shortId": ${budgetBotFeatures.delete}
     "td": ${budgetBotFeatures.td}
