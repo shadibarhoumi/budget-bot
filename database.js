@@ -27,15 +27,6 @@ export const createExpense = ({ price, description, otherCurrency, tag }) => {
   return promise;
 };
 
-export const deleteRecordWithId = async (id) => {
-  AirtableBase("Expenses").destroy(id, function (err) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-  });
-};
-
 export const getRecordWithShortId = async (shortId) => {
   const matchingRecords = await AirtableBase("Expenses")
     .select({
@@ -44,4 +35,13 @@ export const getRecordWithShortId = async (shortId) => {
     .all();
 
   return matchingRecords[0];
+};
+
+export const deleteRecordWithId = async (id) => {
+  AirtableBase("Expenses").destroy(id, function (err) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+  });
 };
