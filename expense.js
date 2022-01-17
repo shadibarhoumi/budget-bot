@@ -67,8 +67,8 @@ export const getTotalOfEachCategory = (allRecordsForDuration) => {
     Other: 0,
     Shopping: 0,
     Lodging: 0,
-    Reimbursesb: 0,
-    Reimbursewx: 0,
+    ReimburseHusband: 0,
+    ReimburseWife: 0,
   };
 
   for (const record of allRecordsForDuration) {
@@ -84,10 +84,10 @@ export const getTotalOfEachCategory = (allRecordsForDuration) => {
       totalOfCategory["Lodging"] += amount;
     } else if (category == "Shopping") {
       totalOfCategory["Shopping"] += amount;
-    } else if (category == "Reimbursesb") {
-      totalOfCategory["Reimbursesb"] += amount;
-    } else if (category == "Reimbursewx") {
-      totalOfCategory["Reimbursewx"] += amount;
+    } else if (category == "ReimburseHusband") {
+      totalOfCategory["ReimburseHusband"] += amount;
+    } else if (category == "ReimburseWife") {
+      totalOfCategory["ReimburseWife"] += amount;
     }
   }
   return totalOfCategory;

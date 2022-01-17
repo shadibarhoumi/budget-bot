@@ -46,8 +46,8 @@ const redundantInputWords = [
   "other",
   "shopping",
   "food",
-  "reimbursesb",
-  "reimbursewx",
+  "muffin",
+  "piggy",
   "$",
 ];
 
@@ -88,11 +88,11 @@ function getNewCategory(txt) {
   if (txt.includes("shopping")) {
     return "Shopping";
   }
-  if (txt.includes("reimbursesb")) {
-    return "Reimbursesb";
+  if (txt.includes("piggy")) {
+    return "ReimburseWife";
   }
-  if (txt.includes("Reimbursewx")) {
-    return "Reimbursewx";
+  if (txt.includes("muffin")) {
+    return "ReimburseHusband";
   }
   // the input category is set to food by default
   return "Food";
