@@ -88,10 +88,10 @@ function getNewCategory(txt) {
   if (txt.includes("shopping")) {
     return "Shopping";
   }
-  if (txt.includes("piggy")) {
+  if (txt.includes("reimburse wife")) {
     return "ReimburseWife";
   }
-  if (txt.includes("muffin")) {
+  if (txt.includes("reimburse husband")) {
     return "ReimburseHusband";
   }
   // the input category is set to food by default
